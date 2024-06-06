@@ -27,7 +27,9 @@ Here is a snippet of the HTML:
 ## Usage
 
 Viewing photos: Click on any photo to view it.
+
 Navigating photos: Use the image thumbnail navigation to navigate through the photos.
+
 Closing the full screen view: Click Exit button to exit the full screen view.
 
 ## Folder Structure
