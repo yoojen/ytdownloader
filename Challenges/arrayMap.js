@@ -23,5 +23,3 @@ function findContigousSubArray(arr, target) {
     
     return false
 }
-
-console.log(findContigousSubArray(arr=[1, 2, 3, 4 ,5], target=9))

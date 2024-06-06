@@ -47,5 +47,3 @@ function stringTransformation(string) {
         return charAsciiCodes
     }
 }
-
-console.log(stringTransformation("Chocolate"))
