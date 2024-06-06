@@ -10,8 +10,7 @@
 .container{
     background-color: rgb(236, 48, 236);
     width: 100%;
-    margin-left: 50%;
-    transform: translateX(-50%);
+    height: 100vh;
     /* margin-top: 10px; */
     display: flex;
     flex-wrap: wrap;
@@ -19,7 +18,7 @@
 
 .single-image{
     width: 25%;
-    height: 300px;
+    height: 100%;
     position: relative;
 }
 .single-image .description{
@@ -56,10 +55,16 @@
     top: 0;
     width: 100%;
     height: 100vh;
-    background-color: white; 
+    background-color: white;
     display: none;
 }
-
+.full-size-model img{
+    width: 100%;
+    -webkit-animation-name: photo-slide ;
+    -webkit-animation-duration: .4s; 
+    animation-name: photo-slide ;
+    animation-duration: .4s;
+}
 .full-size-model .close-btn{
     color: red;
     cursor: pointer;
@@ -83,3 +88,81 @@
 .image:hover .tooltip-content {
   visibility: visible;
 }
+.thumbnail_imgs{
+    margin-left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    width: 40%;
+    height: 20%;
+    background-color: gray;
+    position: absolute;
+    bottom: 0;
+    overflow-x: scroll;
+}
+
+.thumbnail_imgs img{
+    text-align: center;
+    width: 25%;
+    height: 100%;
+    cursor: pointer;
+}
+.thumbnail_imgs img:hover{
+    border: 2px solid yellow;
+}
+
+/* Adjusting point view */
+@media screen and (max-width: 760px){
+    .single-image h1, p{
+        display: none;
+    }
+}
+@media screen and (max-width: 960px){
+    .thumbnail_imgs{
+        width: 70%;
+        height: 15%;
+    }
+    .thumbnail_imgs img{
+        height: 100%;
+        cursor: pointer;
+    }
+}
+
+@media screen and (max-width: 480px){
+    .thumbnail_imgs{
+        width: 100%;
+        height: 15%;
+        background-color: rgb(145, 34, 53);
+    }
+    .thumbnail_imgs img{
+        background-color: green;
+    }
+}
+/* Chrome, Safari, Opera */
+@-webkit-keyframes photo-slide {
+    0%   {width: 10%;}
+    10%  {width: 20%;}
+    20%  {width: 30%;}
+    40%  {width: 40%;}
+    50%  {width: 50%;}
+    60%  {width: 60%;}
+    70%  {width: 70%;}
+    80%  {width: 80%;}
+    90%  {width: 90%;}
+    100% {width: 100%;}
+}
+
+/* Other browsers */
+@keyframes example { 
+    0%   {width: 0%;}
+    10%  {width: 10%;}
+    20%  {width: 30%;}
+    40%  {width: 40%;}
+    50%  {width: 50%;}
+    60%  {width: 60%;}
+    70%  {width: 70%;}
+    80%  {width: 80%;}
+    90%  {width: 90%;}
+    100% {width: 100%;} 
+}
+
