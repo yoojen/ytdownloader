@@ -51,7 +51,7 @@ photo-gallery/
 # 2. JAVASCRIPT CHALLENGES
 This project includes two challenges done in JavaScript. The first one gives you array of integers and target sum. I've write function to take both parameters and then return true if subarray found or false when not found.
 
-Scond one transform string based on these instructions:
+Scond challenge is to transform string based on these instructions:
 
 ● If the length of the string is divisible by 3, reverse the entire string.
     
