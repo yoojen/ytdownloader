@@ -29,22 +29,23 @@ function charToAsciiUnicode(input) {
 /**
  * Actual string transformer
  * @param {String} string - The input to be processed
+ * @returns {String} Returns new transformed version of input
  */
 function stringTransformation(string) {
     const stringLength = string.length
 
     if ((stringLength % 3 == 0) && (stringLength % 5 == 0)) {
         const reversed = reverseString(string);
-        console.log(reversed);
+        return reversed
     }
     if (stringLength % 3 == 0) {
         const reversed = reverseString(string)
-        console.log(reversed);
+        return reversed
     }
     if (stringLength % 5 == 0) {
         const charAsciiCodes = charToAsciiUnicode(string)
-        console.log(charAsciiCodes);
+        return charAsciiCodes
     }
 }
 
-stringTransformation("Chocolate");
+console.log(stringTransformation("Chocolate"))
