@@ -1,29 +1,50 @@
 /**
- * reverString: Helper function to reverse string
- * input: string to be reversed
- * Return: String
+ * Helper function to reverse string
+ * @param {String} input - Input string to be reversed
+ * @returns {String} - Returns reversed string
  */
 function reverseString(input) {
-    for (let i = input.length; i < 0; i--) {
-        console.log(input[i])
+    let reversed = ""
+    for (let i = input.length - 1; i >=0; i--) {
+        reversed += input[i]
     }
+    return reversed.replace(/ /g, '');
 }
-reverseString("eugene");
+
+
 /**
- * stringTransformation: Transform string based on divisibility
- * string: Input to be processed
- * Return: Boolean 
+ * Find unicode for each characters in string
+ * @param {String} input 
+ * @returns {String} - Returns ASCII codes corresponding to input text 
+ */
+function charToAsciiUnicode(input) {
+    let asciiCodes = ""
+    for (let i = 1; i < input.length; i++) {
+       asciiCodes += `${input.charCodeAt(i)} `;
+    }
+    return asciiCodes;
+}
+
+
+/**
+ * Actual string transformer
+ * @param {String} string - The input to be processed
  */
 function stringTransformation(string) {
     const stringLength = string.length
 
-    if ((stringLength % 3 == 0) && (stringLength % 5)) {
-        console.log("divisible by btth 3 and 5")
+    if ((stringLength % 3 == 0) && (stringLength % 5 == 0)) {
+        const reversed = reverseString(string);
+        console.log(reversed);
     }
     if (stringLength % 3 == 0) {
-        console.log("divisible by 3")
+        const reversed = reverseString(string)
+        console.log(reversed);
     }
     if (stringLength % 5 == 0) {
-        console.log("divisible by 3")
+        const charAsciiCodes = charToAsciiUnicode(string)
+        console.log(charAsciiCodes);
     }
 }
+
+stringTransformation("Chocolate");
