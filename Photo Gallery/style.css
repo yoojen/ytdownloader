@@ -10,21 +10,34 @@
 .container{
     background-color: rgb(236, 48, 236);
     width: 100%;
-    height: 100vh;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    /* margin-top: 10px; */
     display: flex;
+    flex-wrap: wrap;
 }
 
 .single-image{
     width: 25%;
-    height: 100%;
+    height: 300px;
+    position: relative;
+}
+.single-image .description{
+    position: absolute;
+    bottom: 30px;
+    margin-left: 30px;
+    color: white;
+
 }
 
+.single-image .description p{
+    opacity: .8;
+}
 .single-image .image{
-    display: relative;
+    /* display: relative; */
     width: 100%;
     height: 100%;
     overflow: hidden;
-    color: white;
     cursor: pointer;
 }
 
@@ -32,19 +45,6 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-}
-
-.single-image .image .names{
-    position: absolute;
-    top: 80%;
-    margin-left: 30px;
-}
-
-.single-image p{
-    position: absolute;
-    bottom: 5%;
-    margin-left: 30px;
-    opacity: .8;
 }
 
 .single-image .image:hover{

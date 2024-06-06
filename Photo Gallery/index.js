@@ -2,32 +2,60 @@ const images = [
   {
     id: 1,
     src: "./images/fox.jpg",
-      h1: "FENNEC",
-      h2: "FOX",
-      origin: "India",
+    h1: "FENNEC",
+    h2: "FOX",
+    origin: "India",
   },
   {
     id: 2,
     src: "./images/humpback-whale.jpg",
-      h1: "HUMPBACK",
-      h2: "WHALE",
-      origin: "South Africa",
+    h1: "HUMPBACK",
+    h2: "WHALE",
+    origin: "South Africa",
   },
   {
     id: 3,
     src: "./images/baboons_thumb.avif",
-      h1: "COMMON BROWN",
-      h2: "BOBOON",
-      origin: "South Africa",
+    h1: "COMMON BROWN",
+    h2: "BOBOON",
+    origin: "South Africa",
   },
   {
     id: 4,
     src: "./images/indian-spot-deer.jpg",
-    
-      h1: "SPOTTED",
-      h2: "DEER",
-      origin: "Amazon",
-    
+
+    h1: "SPOTTED",
+    h2: "DEER",
+    origin: "Amazon",
+  },
+  {
+    id: 5,
+    src: "./images/wolf.webp",
+    h1: "COMMON BROWN",
+    h2: "BOBOON",
+    origin: "South Africa",
+  },
+  {
+    id: 6,
+    src: "./images/indian-spot-deer.jpg",
+
+    h1: "SPOTTED",
+    h2: "DEER",
+    origin: "Amazon",
+  },
+  {
+    id: 7,
+    src: "./images/fox.jpg",
+    h1: "FENNEC",
+    h2: "FOX",
+    origin: "India",
+  },
+  {
+    id: 8,
+    src: "./images/humpback-whale.jpg",
+    h1: "HUMPBACK",
+    h2: "WHALE",
+    origin: "South Africa",
   },
 ];
 
@@ -38,18 +66,17 @@ const closeBtn = document.querySelector(".close-btn");
 container.innerHTML = ""
 images.forEach((image) => {
     container.innerHTML += `
-        <div class="single-image">
-            <div class="image">
-                <small class="tooltip-content">View this image</small>
-                <img src=${image.src} data-id = ${image.id} alt="">
-                <div class="names">
-                    <h1>${image.h1}</h1>
-                    <h1>${image.h2}</h1>
-                    </div>
-                    <p>${image.origin}</p>
-                </div>
-            </div>
+      <div class="single-image">
+        <div class="image">
+          <small class="tooltip-content">View this image</small>
+          <img src=${image.src} data-id = ${image.id} alt="">
         </div>
+        <div class="description">
+          <h1>${image.h1}</h1>
+          <h1>${image.h2}</h1>
+          <p>${image.origin}</p>
+        </div>
+      </div>
     `;
 })
 
