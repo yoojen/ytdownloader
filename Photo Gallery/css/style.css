@@ -106,6 +106,7 @@
     width: 25%;
     height: 100%;
     cursor: pointer;
+    object-fit: cover;
 }
 .thumbnail_imgs img:hover{
     border: 2px solid yellow;
