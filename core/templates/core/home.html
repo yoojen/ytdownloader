@@ -1,0 +1,16 @@
+{% extends "core/base.html" %}
+
+{% block body %}
+<form action="{% url 'home' %}" method="post">
+    {% csrf_token %}
+    {{form.as_p}}
+    <button type="submit">Search</button>
+</form>
+
+{% for d in data %}
+    <p>{{d.title}}</p>
+    <a href="{{d.video_url}}">{{d.video_url}}</a>
+    <img src="{{d.thumbnail}}">
+
+{% endfor %}
+{% endblock %}
