@@ -1,0 +1,33 @@
+{% extends "core/base.html" %}
+{% block body %}
+<form action="{% url 'show_available_download' %}" method="post">
+    {% csrf_token %}
+    {{form.as_p}}
+    <button type="submit">download</button>
+</form>
+
+{{title}}
+{{thumbnail}}
+<div class="downloadable-items">
+    <div class="audios">
+        {% for k in audios.values %}
+            <div class="audio-item">
+                <p>{{k.type}}</p>
+                <p>{{k.quality}}</p>
+                {{k.size}}</small>
+                <small>{{k.item}}</small>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="videos">
+            {% for k in videos.values %}
+            <div class="video-item">
+                <p>{{k.type}}</p>
+                <p>{{k.quality}}</p>
+                <small>{{k.size}}</small>
+                <small>{{k.item}}</small>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
