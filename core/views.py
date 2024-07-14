@@ -44,30 +44,38 @@ def show_available_download(request):
                     print("from cache")
                     audios = cache.get(f"{link}_audios")
                     videos = cache.get(f"{link}_videos")
+                    thumbnail = cache.get(f"{link}_thumbnail")
                 else:
                     print("From API")
-                    audios, videos = request_youtube_resource(link)
+                    audios, videos, thumbnail_url = request_youtube_resource(
+                        link)
                     cache.set(f"{link}_audios", audios)
                     cache.set(f"{link}_videos", videos)
+                    thumbnail = cache.set(f"{link}_thumbnail", thumbnail_url)
                 for audio in audios:
                     audios_dict[f"{count}_audio"] = {
-                        "title": audio.title,
                         "type": audio.type,
                         "size": audio.filesize_mb,
+                        "quality": audio.abr,
                         "item": str(audio)
                     }
                     count = count + 1
                 for video in videos:
-                    videos_dict[f"{count}_video"] = {
-                        "title": video.title,
-                        "type": video.type,
-                        "size": video.filesize_mb,
-                        "item": str(video)
-                    }
-                    count = count + 1
+                    title = video.title
+                    if video.resolution in ["360p", "1080p",
+                                            "720p", "480p"]:
+                        videos_dict[f"{count}_video"] = {
+                            "type": video.mime_type,
+                            "size": video.filesize_mb,
+                            "quality": video.resolution,
+                            "item": str(video)
+                        }
+                        count = count + 1
                 return render(request, "core/download.html", {'form': form, 
                                                               "audios": audios_dict, 
-                                                              "videos": videos_dict})
+                                                              "videos": videos_dict,
+                                                              "title": title,
+                                                              "thumbnail": thumbnail})
         except Exception as e:
             messages.error(request, str(e))
             return redirect("show_available_download")
