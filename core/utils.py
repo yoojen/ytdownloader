@@ -6,8 +6,8 @@ def request_youtube_resource(yt_resource_link: str):
     yt = YouTube(yt_resource_link)
     audios = yt.streams.filter(only_audio=True).order_by("abr")
     videos = yt.streams.filter(file_extension='mp4')
-
-    return [audios, videos]
+    
+    return [audios, videos, yt.thumbnail_url]
 
 
 def search_youtube_resources(request, query: str):
