@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.core.cache import cache
 from django.contrib import messages
 from pytube.contrib.search import Search
-from .utils import request_youtube_resource, search_youtube_resources
+from .utils import load_fetched_data, request_youtube_resource, search_youtube_resources
 from .forms import SearchForm, DownloadForm
 
 def home(request):
@@ -40,18 +40,7 @@ def show_available_download(request):
             count = 0
             if form.is_valid():
                 link = form.cleaned_data["yt_link"]
-                if cache.get(f"{link}_audios") or cache.get(f"{link}_videos"):
-                    print("from cache")
-                    audios = cache.get(f"{link}_audios")
-                    videos = cache.get(f"{link}_videos")
-                    thumbnail = cache.get(f"{link}_thumbnail")
-                else:
-                    print("From API")
-                    audios, videos, thumbnail_url = request_youtube_resource(
-                        link)
-                    cache.set(f"{link}_audios", audios)
-                    cache.set(f"{link}_videos", videos)
-                    thumbnail = cache.set(f"{link}_thumbnail", thumbnail_url)
+                audios, videos, thumbnail = load_fetched_data(link)
                 for audio in audios:
                     audios_dict[f"{count}_audio"] = {
                         "type": audio.type,
