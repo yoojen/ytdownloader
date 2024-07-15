@@ -1,33 +1,68 @@
 {% extends "core/base.html" %}
 {% block body %}
-<form action="{% url 'show_available_download' %}" method="post">
+<form action="{% url 'show_available_download' %}" method="POST">
     {% csrf_token %}
     {{form.as_p}}
-    <button type="submit">download</button>
+    <button class="submit" type="submit">download</button>
 </form>
 
-{{title}}
-{{thumbnail}}
-<div class="downloadable-items">
-    <div class="audios">
-        {% for k in audios.values %}
-            <div class="audio-item">
-                <p>{{k.type}}</p>
-                <p>{{k.quality}}</p>
-                {{k.size}}</small>
-                <small>{{k.item}}</small>
-            </div>
-            {% endfor %}
-        </div>
+<div class="download-area">
+    <div class="thumbnail">
+        <img src="{{thumbnail}}" alt="{{title}}">
+        <i><h4>Video title: {{title}}</h4></i>
+        <i><small><a href="{{link}}">{{link}}</a></small></i>
+    </div>
+    <div class="items">
         <div class="videos">
-            {% for k in videos.values %}
-            <div class="video-item">
-                <p>{{k.type}}</p>
-                <p>{{k.quality}}</p>
-                <small>{{k.size}}</small>
-                <small>{{k.item}}</small>
-            </div>
-        {% endfor %}
+            <div class="title"><h1 id="videos">VIDEOS</h1></div>
+            <table>
+                <th>Quality</th>
+                <th>Size</th>
+                <th>Action</th>
+                {% for k in videos.values %}
+                    <tr>
+                        <td>{{k.quality}}</td>
+                        <td>{{k.size}} MBs</td>
+                        <a href="{% url 'download' link  k.quality k.type%}">
+                            {{k.quality}} {{k.type}} {{link}}</a>
+                        <td><button class="item-btn">Download</button></td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <div class="audios">
+            <div class="title"><h1 id="audios">AUDIOS</h1></div>
+            <table>
+                <th>Quality</th>
+                <th>Size</th>
+                <th>Action</th>
+                {% for k in audios.values %}
+                    <tr>
+                        <td style="display: none;">{{k.item}}</td>
+                        <td>{{k.quality}}</td>
+                        <td>{{k.size}} MBs</td>
+                        <td><button class="item-btn">Download</button></td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
     </div>
 </div>
+<script>
+    const downloadBtn = document.querySelectorAll('.item-btn')   
+    const thumbnail = document.querySelector('.thumbnail')
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    let searchBoxValue = ""
+
+    downloadBtn.forEach((btn)=>{
+        btn.addEventListener('click', async(e)=>{
+            const quality = e.target.parentNode.parentNode.children[1].innerHTML
+            const resolution = e.target.parentNode.parentNode.children[0].innerHTML
+            const link = thumbnail.childNodes[5].childNodes[0].childNodes[0].innerHTML
+            let parents = e.target.parentNode.parentNode.parentNode.parentNode.parentNode
+            let clickedArea = parents.children[0].children[0].innerHTML
+        })
+    })
+</script>
+
 {% endblock %}
