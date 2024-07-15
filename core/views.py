@@ -1,3 +1,5 @@
+from django.shortcuts import render
+from pathlib  import Path
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.core.cache import cache
@@ -40,31 +42,25 @@ def show_available_download(request):
             count = 0
             if form.is_valid():
                 link = form.cleaned_data["yt_link"]
-                audios, videos, thumbnail = load_fetched_data(link)
+                url_link = link.split("/")[-1]
+                audios, videos, thumbnail, link = load_fetched_data(link)
                 for audio in audios:
                     audios_dict[f"{count}_audio"] = {
-                        "type": audio.type,
-                        "size": audio.filesize_mb,
-                        "quality": audio.abr,
-                        "item": str(audio)
+                        "type": str(audio.type),"size": audio.filesize_mb,
+                        "quality": audio.abr, "item": audio
                     }
                     count = count + 1
                 for video in videos:
                     title = video.title
-                    if video.resolution in ["360p", "1080p",
-                                            "720p", "480p"]:
+                    if video.resolution in ["360p", "720p", "480p"]:
                         videos_dict[f"{count}_video"] = {
-                            "type": video.mime_type,
-                            "size": video.filesize_mb,
-                            "quality": video.resolution,
-                            "item": str(video)
+                            "type": str(video.mime_type).split('/')[0], "size": video.filesize_mb,
+                            "quality": video.resolution, "item": str(video)
                         }
                         count = count + 1
-                return render(request, "core/download.html", {'form': form, 
-                                                              "audios": audios_dict, 
-                                                              "videos": videos_dict,
-                                                              "title": title,
-                                                              "thumbnail": thumbnail})
+                return render(request, "core/download.html", {'form': form, "audios": audios_dict, 
+                                                              "videos": videos_dict, "title": title,
+                                                              "thumbnail": thumbnail, "link": url_link})
         except Exception as e:
             messages.error(request, str(e))
             return redirect("show_available_download")
@@ -73,6 +69,37 @@ def show_available_download(request):
                                                                                 "audios": audios_dict,
                                                                                 "videos": videos_dict})
 
+from pathlib import Path
+import os
+from django.http import FileResponse
+def download(request, link, quality, type):
+    link = f"https://www.youtube.com/{link}"
+    print("DOWNLOAD ->", link)
+    download_path = os.path.join(Path.home(), 'Downloads')
+    videos = cache.get(f"{link}_videos")
+    if type == 'video' and videos:
+        video = [video for video in videos if video.resolution == quality]
+        video[0].download(download_path)
+        return FileResponse(open(video[0], 'rb'), as_attachment=True, filename=video[0].title)
+    return HttpResponse({})
 
-def download(request):
-    pass
+
+
+def my_view(request, param1, param2):
+    """
+    A view that accepts two URL parameters and renders a template.
+
+    Args:
+        request: The HTTP request object.
+        param1: The first URL parameter.
+        param2: The second URL parameter.
+
+    Returns:
+        A rendered template with the parameters passed as context.
+    """
+
+    context = {
+        'param1': param1,
+        'param2': param2,
+    }
+    return render(request, 'core/my_template.html', context)
