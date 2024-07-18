@@ -21,10 +21,9 @@
                 <th>Action</th>
                 {% for k in videos.values %}
                     <tr>
+                        <td class="mime_type" style="display: none;">{{k.type}}</td>
                         <td>{{k.quality}}</td>
                         <td>{{k.size}} MBs</td>
-                        <a href="{% url 'download' link  k.quality k.type%}">
-                            {{k.quality}} {{k.type}} {{link}}</a>
                         <td><button class="item-btn">Download</button></td>
                     </tr>
                 {% endfor %}
@@ -38,7 +37,7 @@
                 <th>Action</th>
                 {% for k in audios.values %}
                     <tr>
-                        <td style="display: none;">{{k.item}}</td>
+                        <td class="mime_type" style="display: none;">{{k.type}}</td>
                         <td>{{k.quality}}</td>
                         <td>{{k.size}} MBs</td>
                         <td><button class="item-btn">Download</button></td>
@@ -51,18 +50,74 @@
 <script>
     const downloadBtn = document.querySelectorAll('.item-btn')   
     const thumbnail = document.querySelector('.thumbnail')
-    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
     let searchBoxValue = ""
 
     downloadBtn.forEach((btn)=>{
-        btn.addEventListener('click', async(e)=>{
+        btn.addEventListener('click', (e)=>{
             const quality = e.target.parentNode.parentNode.children[1].innerHTML
             const resolution = e.target.parentNode.parentNode.children[0].innerHTML
             const link = thumbnail.childNodes[5].childNodes[0].childNodes[0].innerHTML
+            const mimeType =document.querySelector('.mime_type').innerHTML
             let parents = e.target.parentNode.parentNode.parentNode.parentNode.parentNode
             let clickedArea = parents.children[0].children[0].innerHTML
-        })
+
+            fetch("{% url 'download'%}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+                    'X-CSRFToken': getCookie('csrftoken'),
+                },
+                body: new URLSearchParams({
+                    "link": link,
+                    "quality": quality,
+                    "type": mimeType
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const contentDisposition = response.headers.get('Content-Disposition');
+                const filename = contentDisposition ? contentDisposition.split('filename=')[1] : 'video.mp4';
+                
+                // Create a new Blob object
+                return response.blob().then(blob => {
+                    const url = window.URL.createObjectURL(blob);
+                    
+                    // Create an <a> element and click it to trigger the download
+                    const a = document.createElement('a');
+                    a.style.display = 'none';
+                    a.href = url;
+                    a.download = filename;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    return filename;
+                });
+            })
+            .then(filename => {
+                alert(`Download complete: ${filename}`);
+            })
+            .catch(error => {
+                console.error('Download failed', error);
+                alert('Download failed. Please try again.');
+            });
+        });
     })
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
 </script>
 
 {% endblock %}

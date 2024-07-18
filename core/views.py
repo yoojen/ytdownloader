@@ -1,12 +1,17 @@
+import pathlib
+import tempfile
 from django.shortcuts import render
 from pathlib  import Path
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, StreamingHttpResponse
 from django.core.cache import cache
 from django.contrib import messages
 from pytube.contrib.search import Search
-from .utils import load_fetched_data, request_youtube_resource, search_youtube_resources
+from .utils import load_fetched_data
 from .forms import SearchForm, DownloadForm
+from pathlib import Path
+import os
+from django.http import FileResponse
 
 def home(request):
     form = SearchForm()
@@ -69,20 +74,40 @@ def show_available_download(request):
                                                                                 "audios": audios_dict,
                                                                                 "videos": videos_dict})
 
-from pathlib import Path
-import os
-from django.http import FileResponse
-def download(request, link, quality, type):
-    link = f"https://www.youtube.com/{link}"
-    print("DOWNLOAD ->", link)
-    download_path = os.path.join(Path.home(), 'Downloads')
-    videos = cache.get(f"{link}_videos")
-    if type == 'video' and videos:
-        video = [video for video in videos if video.resolution == quality]
-        video[0].download(download_path)
-        return FileResponse(open(video[0], 'rb'), as_attachment=True, filename=video[0].title)
-    return HttpResponse({})
+# def download(request):
+#     if request.method == 'POST':
+#         link = request.POST.get('link')
+#         quality = request.POST.get('quality')
+#         type = request.POST.get('type')
+#     print(link, quality, type)
+#     link = f"https://www.youtube.com/{link}"
+#     download_path = os.path.join(Path.home(), 'Downloads')
+#     videos = cache.get(f"{link}_videos")
+#     if type == 'video' and videos:
+#         video = [video for video in videos if video.resolution == quality]
+#         stream = video[0]
+#         return StreamingHttpResponse(stream)
+#         response['Content-Disposition'] = f'attachment; filename="{stream.title}.mp4"'
+#         return response
+#         # response = HttpResponse(stream, content_type='video/mp4')
+#         # response['Content-Disposition'] = f'attachment; filename="{stream.title}.mp4"'
+#         # return response
+#     return HttpResponse({})
 
+
+def generate_large_file():
+    for i in range(1, 1001):
+        yield f"Line {i}\n"
+
+
+def download(request):
+    from pytube import YouTube
+    yt=YouTube("https://www.youtube.com/watch?v=YLslsZuEaNE")
+    audio=yt.streams.filter(only_audio=True)
+    print(audio)
+    response = StreamingHttpResponse(generate_large_file())
+    response['Content-Disposition'] = f'attachment; filename="john.txt"'
+    return response
 
 
 def my_view(request, param1, param2):

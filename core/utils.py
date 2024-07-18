@@ -4,7 +4,9 @@ from django.core.cache import cache
 
 def request_youtube_resource(yt_resource_link: str):
     """Module that send request to youtube api via pytube"""
+    print("Before request")
     yt = YouTube(yt_resource_link)
+    print("After request")
     audios = yt.streams.filter(only_audio=True).order_by("abr")
     videos = yt.streams.filter(file_extension='mp4', progressive=True)
     
